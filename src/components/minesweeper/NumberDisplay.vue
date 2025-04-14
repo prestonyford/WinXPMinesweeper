@@ -25,7 +25,7 @@ export default defineComponent({
 	},
 	computed: {
 		digits: function(): String {
-			const num: String = this.number.toString().padStart(3, '0');
+			const num: String = this.number!.toString().padStart(3, '0');
 			return num;
 		}
 	}
@@ -38,8 +38,8 @@ export default defineComponent({
 	border-left: 1px #808080 solid;
 	border-right: 1px white solid;
 	border-bottom: 1px white solid;
-	width: 40px;
-	height: 24px;
+	width: 60px;
+	height: 36px;
 	padding: 1px;
 	gap: 2px;
 }

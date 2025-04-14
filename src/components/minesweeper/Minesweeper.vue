@@ -4,14 +4,15 @@
 
 		</div>
 		<div class="frame grow">
-			<div class="bg-[#C0C0C0] h-full flex flex-col p-[6px]">
-				<div class="upper-frame h-[37px] flex justify-around items-center">
+			<div class="bg-[#C0C0C0] h-full flex flex-col p-[6px] gap-[6px]">
+				<div class="upper-frame h-[46px] flex justify-around items-center">
 					<NumberDisplay :number="+123" />
-					<button class="h-[26px] w-[26px] flex items-center justify-center" @click="reset">
+					<button class="h-[28px] w-[28px] flex items-center justify-center" @click="reset">
 						<img class="pointer-events-none" src="../../assets/smile.png">
 					</button>
 					<NumberDisplay :number="time" />
 				</div>
+				<GameBoard class="grow" :rows="9" :cols="9" />
 			</div>
 		</div>
 	</div>
@@ -19,6 +20,7 @@
 
 <script setup lang="ts">
 import NumberDisplay from './NumberDisplay.vue';
+import GameBoard from './GameBoard.vue';
 </script>
 
 <script lang="ts">

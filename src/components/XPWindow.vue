@@ -25,11 +25,11 @@ export default defineComponent({
 		},
 		startingContentWidth: {
 			type: String,
-			default: "164px"
+			default: "auto"
 		},
 		startingContentHeight: {
 			type: String,
-			default: "227px"
+			default: "auto"
 		}
 	},
 	data() {
