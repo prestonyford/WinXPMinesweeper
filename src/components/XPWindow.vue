@@ -1,5 +1,5 @@
 <template>
-	<div class="window absolute flex flex-col" style="width: 500px; height: 400px;" ref="window">
+	<div class="window absolute flex flex-col" :style="windowStyle" ref="window">
 		<div class="chrome w-full flex gap-1" @mousedown="startDrag">
 			<div class="icon pointer-events-none flex items-center h-full p-0.5">
 				<slot name="icon"></slot>
@@ -19,8 +19,18 @@ import { defineComponent } from 'vue'
 
 export default defineComponent({
 	props: {
-		title: String,
-		required: true
+		title: {
+			type: String,
+			required: true
+		},
+		startingWidth: {
+			type: String,
+			default: "500px"
+		},
+		startingHeight: {
+			type: String,
+			default: "400px"
+		}
 	},
 	data() {
 		return {
@@ -28,6 +38,11 @@ export default defineComponent({
 			offsetX: 0,
 			offsetY: 0,
 		};
+	},
+	computed: {
+		windowStyle: function() {
+			return `width: ${this.startingWidth}; height: ${this.startingHeight};`;
+		}
 	},
 	methods: {
 		startDrag(event: MouseEvent) {

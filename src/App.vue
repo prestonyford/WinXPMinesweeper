@@ -14,7 +14,6 @@ import XPWindow from './components/XPWindow.vue'
 				<template #icon>
 					<img src="./assets/Minesweeper.png"/>
 				</template>
-				<!-- <div>Hello, world!</div> -->
 			</XPWindow>
 		</XPBackground>
 	</main>
