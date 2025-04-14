@@ -1,12 +1,12 @@
 <template>
-	<div class="window absolute flex flex-col" :style="windowStyle" ref="window">
+	<div class="window absolute flex flex-col"  ref="window">
 		<div class="chrome w-full flex gap-1" @mousedown="startDrag">
 			<div class="icon pointer-events-none flex items-center h-full p-0.5">
 				<slot name="icon"></slot>
 			</div>
 			<div class="text-white pointer-events-none select-none">{{ title }}</div>
 		</div>
-		<div class="content grow">
+		<div class="content" :style="windowStyle">
 			<div class="h-full">
 				<slot></slot>
 			</div>
@@ -23,11 +23,11 @@ export default defineComponent({
 			type: String,
 			required: true
 		},
-		startingWidth: {
+		startingContentWidth: {
 			type: String,
 			default: "500px"
 		},
-		startingHeight: {
+		startingContentHeight: {
 			type: String,
 			default: "400px"
 		}
@@ -41,7 +41,7 @@ export default defineComponent({
 	},
 	computed: {
 		windowStyle: function() {
-			return `width: ${this.startingWidth}; height: ${this.startingHeight};`;
+			return `width: ${this.startingContentWidth}; height: ${this.startingContentHeight};`;
 		}
 	},
 	methods: {

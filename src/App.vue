@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import XPBackground from './components/XPBackground.vue'
 import XPWindow from './components/XPWindow.vue'
+import Minesweeper from './components/minesweeper/Minesweeper.vue'
 </script>
 
 <template>
@@ -14,6 +15,7 @@ import XPWindow from './components/XPWindow.vue'
 				<template #icon>
 					<img src="./assets/Minesweeper.png"/>
 				</template>
+				<Minesweeper />
 			</XPWindow>
 		</XPBackground>
 	</main>
