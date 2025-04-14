@@ -6,9 +6,11 @@
 		<div class="frame grow">
 			<div class="bg-[#C0C0C0] h-full flex flex-col p-[6px]">
 				<div class="upper-frame h-[37px] flex justify-around items-center">
-					<NumberDisplay />
-					<button class="h-[26px] w-[26px] flex items-center justify-center"><img src="../../assets/smile.png"></button>
-					<NumberDisplay />
+					<NumberDisplay :number="+123" />
+					<button class="h-[26px] w-[26px] flex items-center justify-center" @click="reset">
+						<img class="pointer-events-none" src="../../assets/smile.png">
+					</button>
+					<NumberDisplay :number="time" />
 				</div>
 			</div>
 		</div>
@@ -25,9 +27,26 @@ import { defineComponent } from 'vue';
 export default defineComponent({
 	data() {
 		return {
-
+			bombsLeft: 0,
+			time: 0,
+			interval: 0
 		}
 	},
+	methods: {
+		reset() {
+			console.log("Reset clicked!");
+		}
+	},
+	mounted: function() {
+		window.setInterval(() => {
+			++this.time
+		}, 1000);
+	},
+	beforeUnmount: function() {
+		if (this.interval) {
+			window.clearInterval(this.interval);
+		}
+	}
 })
 </script>
 

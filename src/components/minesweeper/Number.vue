@@ -14,12 +14,15 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue'
+import type { PropType } from 'vue'
 
 export default defineComponent({
 	props: {
 		number: {
-			type: Number,
-			required: true
+			required: true,
+			validator(value: number) {
+				return value >= 0 && value <= 9;
+			},
 		}
 	},
 	data() {

@@ -1,7 +1,7 @@
 <template>
 	<div class="window absolute flex flex-col"  ref="window">
 		<div class="chrome w-full flex gap-1" @mousedown="startDrag">
-			<div class="icon pointer-events-none flex items-center h-full p-0.5">
+			<div class="icon pointer-events-none select-none flex items-center h-full p-0.5">
 				<slot name="icon"></slot>
 			</div>
 			<div class="text-white pointer-events-none select-none">{{ title }}</div>
@@ -25,11 +25,11 @@ export default defineComponent({
 		},
 		startingContentWidth: {
 			type: String,
-			default: "500px"
+			default: "164px"
 		},
 		startingContentHeight: {
 			type: String,
-			default: "400px"
+			default: "227px"
 		}
 	},
 	data() {
