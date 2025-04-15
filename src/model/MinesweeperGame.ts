@@ -116,11 +116,11 @@ export default class MinesweeperGame {
 
 		// Perform a search on all neighboring 0-tiles
 		if (numNeighborBombs === 0) {
-			const queue: [number, number][] = [ ...this.getNeighbors(row, col) ];
+			const stack: [number, number][] = this.getNeighbors(row, col);
 			const visit = new Set<string>();
 
-			while (queue.length) {
-				const [r, c] = queue.pop()!;
+			while (stack.length) {
+				const [r, c] = stack.pop()!;
 				if (visit.has(`${r},${c}`)) {
 					continue;
 				}
@@ -131,7 +131,7 @@ export default class MinesweeperGame {
 
 				const bombs = this.countNeighborBombs(r, c);
 				if (bombs === 0) {
-					queue.push(...this.getNeighbors(r, c));
+					stack.push(...this.getNeighbors(r, c));
 				}
 				this.board[r][c] = { type: TileType.NUMBER, value: bombs };
 			}
