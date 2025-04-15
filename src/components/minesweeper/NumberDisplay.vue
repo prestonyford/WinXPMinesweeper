@@ -38,7 +38,7 @@ export default defineComponent({
 	border-left: 1px #808080 solid;
 	border-right: 1px white solid;
 	border-bottom: 1px white solid;
-	width: 60px;
+	width: 59px;
 	height: 36px;
 	padding: 1px;
 	gap: 2px;

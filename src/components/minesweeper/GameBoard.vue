@@ -1,32 +1,39 @@
 <template>
-	<div class="board flex">
-		<div v-for="_ in new Array(rows!)" >
-			<Tile v-for="_ in new Array(cols)" />
+	<div class="board">
+		<div class="flex" v-for="(_, row) in new Array(rows)" >
+			<MinesweeperTile v-for="(_, col) in new Array(cols)"
+				:tile="props.board[row][col]"
+				@click="onClick(row, col)"
+				@contextmenu.prevent="onRclick(row, col)"
+			/>
 		</div>
 	</div>
 </template>
 
 <script setup lang="ts">
-import Tile from './Tile.vue';
-</script>
+import { computed } from 'vue';
+import { type Tile, TileType } from './TileType.ts';
+import MinesweeperTile from './MinesweeperTile.vue';
 
-<script lang="ts">
-import { defineComponent } from 'vue';
+const props = defineProps<{
+	board: Tile[][]
+}>();
 
-export default defineComponent({
-	props: {
-		rows: Number,
-		cols: Number
-	},
-	data() {
+const emit = defineEmits<{
+	selectTile: [row: number, col: number]
+	markTile: [row: number, col: number]
+}>();
 
-	},
-	computed: {
-		grid() {
-			return "grid-template-columns: repeat(9, auto);";
-		}
-	}
-})
+const rows = computed(() => props.board.length);
+const cols = computed(() => props.board[0].length);
+
+const onClick = (row: number, col: number) => {
+	emit("selectTile", row, col);
+}
+const onRclick = (row: number, col: number) => {
+	emit("markTile", row, col);
+}
+
 </script>
 
 <style scoped>
