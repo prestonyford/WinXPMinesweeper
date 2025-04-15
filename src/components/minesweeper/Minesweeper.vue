@@ -6,7 +6,7 @@
 		<div class="frame">
 			<div class="bg-[#C0C0C0] h-full flex flex-col p-[6px] gap-[6px]">
 				<div class="upper-frame h-[46px] flex justify-between items-center p-[4px]">
-					<NumberDisplay :number="gameState.game.getNumBombs() - numFlags" />
+					<NumberDisplay :number="gameState.game.getNumBombs() - gameState.game.getNumFlags()" />
 					<MinesweeperButton @click="reset" :face="currentButtonFace" />
 					<NumberDisplay :number="time" />
 				</div>
@@ -36,7 +36,6 @@ import { ButtonFace } from '@/model/ButtonFace';
 
 const time = ref(0);
 const interval = ref<number | null>(null);
-const numFlags = ref(0);
 const gameInProgress = ref(true);
 const currentButtonFace = ref(ButtonFace.SMILE);
 
@@ -54,10 +53,8 @@ function markTile(row: number, col: number) {
 	if (gameInProgress.value) {
 		if (gameState.game.getBoard()[row][col].type === TileType.UNOPENED) {
 			gameState.game.flagTile(row, col);
-			++numFlags.value;
 		} else if (gameState.game.getBoard()[row][col].type === TileType.FLAGGED) {
 			gameState.game.unflagTile(row, col);
-			--numFlags.value;
 		}
 	}
 }
@@ -77,20 +74,22 @@ function tileMouseUp() {
 
 function reset() {
 	stopTimer();
-	numFlags.value = 0;
 	gameInProgress.value = true;
 	currentButtonFace.value = ButtonFace.SMILE;
-	gameState.game = MinesweeperGame.HardGame(onGameLost, onGameWon);
+	gameState.game = MinesweeperGame.IntermediateGame(onGameLost, onGameWon);
 	startTimer();
 }
 
 function onGameLost() {
 	gameInProgress.value = false;
 	currentButtonFace.value = ButtonFace.DEAD;
+	stopTimer();
 }
 
 function onGameWon() {
 	gameInProgress.value = false;
+	currentButtonFace.value = ButtonFace.COOL;
+	stopTimer();
 }
 
 function startTimer() {

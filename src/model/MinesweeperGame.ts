@@ -1,8 +1,10 @@
 import { TileType, type Tile } from "./TileType";
 
 export default class MinesweeperGame {
-	private bombLocations: Set<string>
-	private flagLocations: Set<string>
+	private bombLocations: Set<string>;
+	private flagLocations: Set<string>;
+	private numOpenTiles: number;
+	private numFlags: number;
 	private board: Tile[][];
 
 	public constructor(
@@ -14,11 +16,17 @@ export default class MinesweeperGame {
 	) {
 		this.bombLocations = new Set();
 		this.flagLocations = new Set();
+		this.numOpenTiles = 0;
+		this.numFlags = 0;
 
 		if (numBombs > rows * cols) {
 			throw new Error("More bombs than tiles");
 		}
 		this.board = this.generateBoard();
+	}
+
+	public static DebugGame(onGameLose: () => void = () => {}, onGameWin: () => void = () => {}): MinesweeperGame {
+		return new MinesweeperGame(3, 3, 3, onGameLose, onGameWin);
 	}
 
 	public static BeginnerGame(onGameLose: () => void = () => {}, onGameWin: () => void = () => {}): MinesweeperGame {
@@ -104,6 +112,16 @@ export default class MinesweeperGame {
 		this.onGameLose();
 	}
 
+	private checkWin() {
+		if (
+			this.numOpenTiles + this.numBombs === this.rows * this.cols
+			&& this.flagLocations.size === this.bombLocations.size
+			&& [...this.flagLocations].every(flag => this.bombLocations.has(flag))
+		) {
+			this.onGameWin();
+		}
+	}
+
 	public chooseTile(row: number, col: number) {
 		if (this.bombLocations.has(`${row},${col}`)) {
 			this.loseGame(row, col);
@@ -113,6 +131,9 @@ export default class MinesweeperGame {
 		}
 		const numNeighborBombs = this.countNeighborBombs(row, col);
 		this.board[row][col] = { type: TileType.NUMBER, value: numNeighborBombs };
+		++this.numOpenTiles;
+
+		this.checkWin();
 
 		// Perform a search on all neighboring 0-tiles
 		if (numNeighborBombs === 0) {
@@ -134,6 +155,7 @@ export default class MinesweeperGame {
 					stack.push(...this.getNeighbors(r, c));
 				}
 				this.board[r][c] = { type: TileType.NUMBER, value: bombs };
+				++this.numOpenTiles;
 			}
 		}
 	}
@@ -142,6 +164,8 @@ export default class MinesweeperGame {
 		if (this.board[row][col].type === TileType.UNOPENED) {
 			this.board[row][col] = { type: TileType.FLAGGED };
 			this.flagLocations.add(`${row},${col}`);
+			++this.numFlags;
+			this.checkWin();
 		}
 	}
 
@@ -149,6 +173,8 @@ export default class MinesweeperGame {
 		if (this.board[row][col].type === TileType.FLAGGED) {
 			this.board[row][col] = { type: TileType.UNOPENED };
 			this.flagLocations.delete(`${row},${col}`);
+			--this.numFlags;
+			this.checkWin();
 		}
 	}
 
@@ -163,5 +189,8 @@ export default class MinesweeperGame {
 	}
 	public getNumBombs(): number {
 		return this.numBombs;
+	}
+	public getNumFlags(): number {
+		return this.numFlags;
 	}
 }
