@@ -25,8 +25,9 @@ export default defineComponent({
 	},
 	computed: {
 		digits: function(): String {
-			const num: String = Math.max(-99, this.number as number).toString().padStart(3, '0');
-			return num;
+			const num = Math.min(999, Math.max(-99, this.number as number));
+			const numStr: String = num.toString().padStart(3, '0');
+			return numStr;
 		}
 	}
 })

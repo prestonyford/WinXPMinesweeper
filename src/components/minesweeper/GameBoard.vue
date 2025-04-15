@@ -1,10 +1,14 @@
 <template>
-	<div class="board">
+	<div class="board overflow-auto">
 		<div class="flex" v-for="(_, row) in new Array(rows)" >
 			<MinesweeperTile v-for="(_, col) in new Array(cols)"
 				:tile="props.board[row][col]"
+				:allowClicks="allowClicks"
 				@click="onClick(row, col)"
 				@contextmenu.prevent="onRclick(row, col)"
+				@mousedown="event => emit('tileMouseDown', event)"
+				@mouseup="emit('tileMouseUp')"
+				@mouseleave="emit('tileMouseUp')"
 			/>
 		</div>
 	</div>
@@ -12,16 +16,19 @@
 
 <script setup lang="ts">
 import { computed } from 'vue';
-import { type Tile, TileType } from './TileType.ts';
+import { type Tile } from '../../model/TileType.ts';
 import MinesweeperTile from './MinesweeperTile.vue';
 
 const props = defineProps<{
-	board: Tile[][]
+	board: Tile[][];
+	allowClicks: boolean
 }>();
 
 const emit = defineEmits<{
 	selectTile: [row: number, col: number]
 	markTile: [row: number, col: number]
+	tileMouseDown: [event: MouseEvent]
+	tileMouseUp: []
 }>();
 
 const rows = computed(() => props.board.length);

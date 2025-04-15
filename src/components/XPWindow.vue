@@ -1,5 +1,5 @@
 <template>
-	<div class="window absolute flex flex-col"  ref="window">
+	<div class="window absolute flex flex-col max-w-screen max-h-screen"  ref="window">
 		<div class="chrome w-full flex gap-1" @mousedown="startDrag">
 			<div class="icon pointer-events-none select-none flex items-center h-full p-0.5">
 				<slot name="icon"></slot>
@@ -7,9 +7,7 @@
 			<div class="text-white pointer-events-none select-none">{{ title }}</div>
 		</div>
 		<div class="content" :style="windowStyle">
-			<div class="h-full">
-				<slot></slot>
-			</div>
+			<slot></slot>
 		</div>
 	</div>
 </template>
@@ -50,7 +48,7 @@ export default defineComponent({
 			if (!windowElement) return;
 
 			this.isDragging = true;
-			this.offsetX = event.clientX - windowElement.offsetLeft;
+			this.offsetX = Math.max(0, event.clientX - windowElement.offsetLeft);
 			this.offsetY = event.clientY - windowElement.offsetTop;
 		},
 		onDrag(event: MouseEvent) {
@@ -59,8 +57,17 @@ export default defineComponent({
 			const windowElement = this.$refs.window as HTMLElement;
 			if (!windowElement) return;
 
-			const newX = event.clientX - this.offsetX;
-			const newY = event.clientY - this.offsetY;
+			const windowWidth = windowElement.offsetWidth;
+			const windowHeight = windowElement.offsetHeight;
+			const viewportWidth = window.innerWidth;
+			const viewportHeight = window.innerHeight;
+
+
+			let newX = event.clientX - this.offsetX;
+			let newY = event.clientY - this.offsetY;
+
+			newX = Math.max(0, Math.min(newX, viewportWidth - windowWidth));
+			newY = Math.max(0, Math.min(newY, viewportHeight - windowHeight));
 
 			windowElement.style.left = `${newX}px`;
 			windowElement.style.top = `${newY}px`;

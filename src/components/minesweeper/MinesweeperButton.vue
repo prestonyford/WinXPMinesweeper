@@ -1,10 +1,22 @@
 <template>
 	<div class="button">
 		<button class="h-[28px] w-[28px] flex items-center justify-center">
-			<img class="pointer-events-none relative" src="../../assets/smile.png">
+			<img v-if="props.face === ButtonFace.SURPRISE" src="../../assets/Surprise.png">
+			<img v-else-if="props.face === ButtonFace.DEAD" src="../../assets/Dead.png">
+			<img v-else-if="props.face === ButtonFace.COOL" src="../../assets/Cool.png">
+			<img v-else src="../../assets/Smile.png">
 		</button>
 	</div>
 </template>
+
+<script setup lang="ts">
+import { ButtonFace } from '@/model/ButtonFace';
+
+const props = defineProps<{
+	face: ButtonFace
+}>();
+
+</script>
 
 <style scoped>
 .button {
@@ -23,6 +35,10 @@ button:active {
 	border-top: 2px #808080 solid;
 	border-right: 2px #adadad solid;
 	border-bottom: 2px #adadad solid;
+}
+img {
+	pointer-events: none;
+	position: relative;
 }
 button:active img {
 	top: 1px;

@@ -3,18 +3,23 @@
 		<div class="bg-[#ECE9D8] h-[19px]">
 
 		</div>
-		<div class="frame grow">
+		<div class="frame">
 			<div class="bg-[#C0C0C0] h-full flex flex-col p-[6px] gap-[6px]">
 				<div class="upper-frame h-[46px] flex justify-between items-center p-[4px]">
 					<NumberDisplay :number="gameState.game.getNumBombs() - numFlags" />
-					<MinesweeperButton @click="reset" />
+					<MinesweeperButton @click="reset" :face="currentButtonFace" />
 					<NumberDisplay :number="time" />
 				</div>
-				<GameBoard class="grow"
-					:board="gameState.game.getBoard()"
-					@selectTile="selectTile"
-					@markTile="markTile"
-				/>
+				<div>
+					<GameBoard
+						:board="gameState.game.getBoard()"
+						:allowClicks="gameInProgress"
+						@selectTile="selectTile"
+						@markTile="markTile"
+						@tileMouseDown="tileMouseDown"
+						@tileMouseUp="tileMouseUp"
+					/>
+				</div>
 			</div>
 		</div>
 	</div>
@@ -25,36 +30,67 @@ import { ref, onMounted, onBeforeUnmount, reactive } from 'vue';
 import NumberDisplay from './NumberDisplay.vue';
 import GameBoard from './GameBoard.vue';
 import MinesweeperButton from './MinesweeperButton.vue';
-import MinesweeperGame from './MinesweeperGame';
-import { TileType } from './TileType';
+import MinesweeperGame from '../../model/MinesweeperGame';
+import { TileType } from '../../model/TileType';
+import { ButtonFace } from '@/model/ButtonFace';
 
 const time = ref(0);
 const interval = ref<number | null>(null);
 const numFlags = ref(0);
+const gameInProgress = ref(true);
+const currentButtonFace = ref(ButtonFace.SMILE);
 
 const gameState = reactive({
-	game: MinesweeperGame.BeginnerGame()
+	game: MinesweeperGame.BeginnerGame(onGameLost, onGameWon)
 });
 
 function selectTile(row: number, col: number) {
-	gameState.game.chooseTile(row, col);
+	if (gameInProgress.value) {
+		gameState.game.chooseTile(row, col);
+	}
 }
 
 function markTile(row: number, col: number) {
-	if (gameState.game.getBoard()[row][col].type === TileType.UNOPENED) {
-		gameState.game.flagTile(row, col);
-		++numFlags.value;
-	} else if (gameState.game.getBoard()[row][col].type === TileType.FLAGGED) {
-		gameState.game.unflagTile(row, col);
-		--numFlags.value;
+	if (gameInProgress.value) {
+		if (gameState.game.getBoard()[row][col].type === TileType.UNOPENED) {
+			gameState.game.flagTile(row, col);
+			++numFlags.value;
+		} else if (gameState.game.getBoard()[row][col].type === TileType.FLAGGED) {
+			gameState.game.unflagTile(row, col);
+			--numFlags.value;
+		}
+	}
+}
+
+function tileMouseDown(event: MouseEvent) {
+	// Left click
+	if (event.button === 0 && currentButtonFace.value === ButtonFace.SMILE) {
+		currentButtonFace.value = ButtonFace.SURPRISE;
+	}
+}
+
+function tileMouseUp() {
+	if (currentButtonFace.value === ButtonFace.SURPRISE) {
+		currentButtonFace.value = ButtonFace.SMILE;
 	}
 }
 
 function reset() {
 	stopTimer();
 	numFlags.value = 0;
-	gameState.game = MinesweeperGame.IntermediateGame();
+	gameInProgress.value = true;
+	currentButtonFace.value = ButtonFace.SMILE;
+	gameState.game = MinesweeperGame.HardGame(onGameLost, onGameWon);
 	startTimer();
+}
+
+function onGameLost() {
+	gameInProgress.value = false;
+	currentButtonFace.value = ButtonFace.DEAD;
+}
+
+function onGameWon() {
+	gameInProgress.value = false;
 }
 
 function startTimer() {
