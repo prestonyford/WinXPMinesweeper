@@ -1,5 +1,6 @@
 # Minesweeper
-Mimics the look and gameplay of Windows XP Minesweeper.
+Mimics the look and gameplay of Windows XP Minesweeper in the browser, for your enjoyment.
+
 ![preview](Screenshot.png)
 
 ## Project Setup
