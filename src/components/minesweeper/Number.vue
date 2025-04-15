@@ -8,10 +8,7 @@ import { defineComponent } from 'vue'
 export default defineComponent({
 	props: {
 		number: {
-			required: true,
-			validator(value: number) {
-				return value >= 0 && value <= 9;
-			},
+			required: true
 		}
 	},
 	data() {

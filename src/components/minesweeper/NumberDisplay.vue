@@ -1,8 +1,8 @@
 <template>
 	<div class="numbers bg-black flex pointer-events-none select-none">
-		<Number :number="parseInt(digits[0])" />
-		<Number :number="parseInt(digits[1])" />
-		<Number :number="parseInt(digits[2])" />
+		<Number :number="digits[0]" />
+		<Number :number="digits[1]" />
+		<Number :number="digits[2]" />
 	</div>
 </template>
 
@@ -19,13 +19,13 @@ export default defineComponent({
 		number: {
 			required: true,
 			validator(value: number) {
-				return value >= 0 && value <= 999;
+				return value <= 999;
 			},
 		}
 	},
 	computed: {
 		digits: function(): String {
-			const num: String = this.number!.toString().padStart(3, '0');
+			const num: String = Math.max(-99, this.number as number).toString().padStart(3, '0');
 			return num;
 		}
 	}
