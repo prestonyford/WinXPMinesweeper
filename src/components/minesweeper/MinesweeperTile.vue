@@ -20,21 +20,24 @@
 			<img src="/src/assets/Flag.png" />
 		</div>
 		<div v-else-if="tile.type === TileType.NUMBER" class="pt-[1px] pl-[1px]" >
-			<img v-if="tile.value !== 0" :src="`/src/assets/Tile${tile.value}.png`" />
+			<img v-if="tile.value !== 0" :src="numImgSrc" />
 		</div>
 	</button>
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { computed, ref } from 'vue';
 import { type Tile, TileType } from '../../model/TileType.ts';
 
-defineProps<{
+const props = defineProps<{
 	tile: Tile;
 	allowClicks: boolean;
 }>();
 
 const isLeftClicked = ref(false);
+const numImgSrc = computed(() => 
+	new URL(`/src/assets/Tile${props.tile.type === TileType.NUMBER ? props.tile.value : 0}.png`, import.meta.url).href
+)
 
 function handleMouseDown(event: MouseEvent) {
 	if (event.button === 0) { // Left click

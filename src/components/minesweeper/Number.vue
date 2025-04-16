@@ -1,22 +1,16 @@
 <template>
-	<img :src="`/src/assets/Number${number}.png`">
+	<img :src="imgSrc">
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue'
+<script setup lang="ts">
+import { computed } from 'vue'
 
-export default defineComponent({
-	props: {
-		number: {
-			required: true
-		}
-	},
-	data() {
-		return {
+const props = defineProps<{
+	number: number | string
+}>();
 
-		}
-	},
-})
+const imgSrc = computed(() => new URL(`/src/assets/Number${props.number}.png`, import.meta.url).href);
+
 </script>
 
 <style scoped>
