@@ -75,10 +75,27 @@ export default defineComponent({
 		stopDrag() {
 			this.isDragging = false;
 		},
+		center() {
+			const windowElement = this.$refs.window as HTMLElement;
+			if (!windowElement) return;
+
+			const viewportWidth = window.innerWidth;
+			const viewportHeight = window.innerHeight;
+
+			const windowWidth = windowElement.offsetWidth;
+			const windowHeight = windowElement.offsetHeight;
+
+			const newX = (viewportWidth - windowWidth) / 2;
+			const newY = (viewportHeight - windowHeight) / 2;
+
+			windowElement.style.left = `${newX}px`;
+			windowElement.style.top = `${newY}px`;
+		}
 	},
 	mounted() {
 		document.addEventListener('mousemove', this.onDrag);
 		document.addEventListener('mouseup', this.stopDrag);
+		this.$nextTick(this.center);
 	},
 	beforeUnmount() {
 		document.removeEventListener('mousemove', this.onDrag);
