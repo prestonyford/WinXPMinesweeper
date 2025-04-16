@@ -1,8 +1,5 @@
 <template>
 	<div class="h-full flex flex-col">
-		<div class="bg-[#ECE9D8] h-[19px]">
-
-		</div>
 		<div class="frame">
 			<div class="bg-[#C0C0C0] h-full flex flex-col p-[6px] gap-[6px]">
 				<div class="upper-frame h-[46px] flex justify-between items-center p-[4px]">
@@ -32,7 +29,7 @@ import GameBoard from './GameBoard.vue';
 import MinesweeperButton from './MinesweeperButton.vue';
 import MinesweeperGame from '../../model/MinesweeperGame';
 import { TileType } from '../../model/TileType';
-import { ButtonFace } from '@/model/ButtonFace';
+import { ButtonFace } from '../../model/ButtonFace';
 
 const time = ref(0);
 const interval = ref<number | null>(null);

@@ -1,5 +1,5 @@
 <template>
-	<div class="window absolute flex flex-col max-w-screen max-h-screen"  ref="window">
+	<div class="window absolute flex flex-col max-w-screen max-h-screen"  ref="windowElement">
 		<div class="chrome w-full flex gap-1" @mousedown="startDrag">
 			<div class="icon pointer-events-none select-none flex items-center h-full p-0.5">
 				<slot name="icon"></slot>
@@ -12,96 +12,89 @@
 	</div>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue'
-
-export default defineComponent({
-	props: {
-		title: {
-			type: String,
-			required: true
-		},
-		startingContentWidth: {
-			type: String,
-			default: "auto"
-		},
-		startingContentHeight: {
-			type: String,
-			default: "auto"
-		}
-	},
-	data() {
-		return {
-			isDragging: false,
-			offsetX: 0,
-			offsetY: 0,
-		};
-	},
-	computed: {
-		windowStyle: function() {
-			return `width: ${this.startingContentWidth}; height: ${this.startingContentHeight};`;
-		}
-	},
-	methods: {
-		startDrag(event: MouseEvent) {
-			const windowElement = this.$refs.window as HTMLElement;
-			if (!windowElement) return;
-
-			this.isDragging = true;
-			this.offsetX = Math.max(0, event.clientX - windowElement.offsetLeft);
-			this.offsetY = event.clientY - windowElement.offsetTop;
-		},
-		onDrag(event: MouseEvent) {
-			if (!this.isDragging) return;
-
-			const windowElement = this.$refs.window as HTMLElement;
-			if (!windowElement) return;
-
-			const windowWidth = windowElement.offsetWidth;
-			const windowHeight = windowElement.offsetHeight;
-			const viewportWidth = window.innerWidth;
-			const viewportHeight = window.innerHeight;
+<script setup lang="ts">
+import { computed, nextTick, onBeforeUnmount, onMounted, ref } from 'vue';
 
 
-			let newX = event.clientX - this.offsetX;
-			let newY = event.clientY - this.offsetY;
+const props = withDefaults(
+	defineProps<{
+		title: string,
+		startingContentWidth?: string,
+		startingContentHeight?: string
+	}>(),
+	{
+		startingContentWidth: 'auto',
+		startingContentHeight: 'auto'
+	}
+);
 
-			newX = Math.max(0, Math.min(newX, viewportWidth - windowWidth));
-			newY = Math.max(0, Math.min(newY, viewportHeight - windowHeight));
+const isDragging = ref(false);
+const offsetX = ref(0);
+const offsetY = ref(0);
+const windowElement = ref<HTMLElement | null>();
 
-			windowElement.style.left = `${newX}px`;
-			windowElement.style.top = `${newY}px`;
-		},
-		stopDrag() {
-			this.isDragging = false;
-		},
-		center() {
-			const windowElement = this.$refs.window as HTMLElement;
-			if (!windowElement) return;
+const windowStyle = computed(() => `width: ${props.startingContentWidth}; height: ${props.startingContentHeight};`);
 
-			const viewportWidth = window.innerWidth;
-			const viewportHeight = window.innerHeight;
+function startDrag(event: MouseEvent) {
+	if (!windowElement.value) return;
 
-			const windowWidth = windowElement.offsetWidth;
-			const windowHeight = windowElement.offsetHeight;
+	isDragging.value = true;
+	offsetX.value = Math.max(0, event.clientX - windowElement.value.offsetLeft);
+	offsetY.value = event.clientY - windowElement.value.offsetTop;
+}
 
-			const newX = (viewportWidth - windowWidth) / 2;
-			const newY = (viewportHeight - windowHeight) / 2;
+function onDrag(event: MouseEvent) {
+	if (!isDragging.value) return;
 
-			windowElement.style.left = `${newX}px`;
-			windowElement.style.top = `${newY}px`;
-		}
-	},
-	mounted() {
-		document.addEventListener('mousemove', this.onDrag);
-		document.addEventListener('mouseup', this.stopDrag);
-		this.$nextTick(this.center);
-	},
-	beforeUnmount() {
-		document.removeEventListener('mousemove', this.onDrag);
-		document.removeEventListener('mouseup', this.stopDrag);
-	},
-})
+	if (!windowElement.value) return;
+
+	const windowWidth = windowElement.value.offsetWidth;
+	const windowHeight = windowElement.value.offsetHeight;
+	const viewportWidth = window.innerWidth;
+	const viewportHeight = window.innerHeight;
+
+
+	let newX = event.clientX - offsetX.value;
+	let newY = event.clientY - offsetY.value;
+
+	newX = Math.max(0, Math.min(newX, viewportWidth - windowWidth));
+	newY = Math.max(0, Math.min(newY, viewportHeight - windowHeight));
+
+	windowElement.value!.style.left = `${newX}px`;
+	windowElement.value!.style.top = `${newY}px`;
+}
+
+function stopDrag() {
+	isDragging.value = false;
+}
+
+function center() {
+	if (!windowElement.value) return;
+
+	const viewportWidth = window.innerWidth;
+	const viewportHeight = window.innerHeight;
+
+	const windowWidth = windowElement.value.offsetWidth;
+	const windowHeight = windowElement.value.offsetHeight;
+
+	const newX = (viewportWidth - windowWidth) / 2;
+	const newY = (viewportHeight - windowHeight) / 2;
+
+	windowElement.value.style.left = `${newX}px`;
+	windowElement.value.style.top = `${newY}px`;
+}
+
+onMounted(() => {
+	window.addEventListener('mousemove', onDrag);
+	window.addEventListener('mouseup', stopDrag);
+	nextTick(center);
+});
+
+onBeforeUnmount(() => {
+	window.removeEventListener('mousemove', onDrag);
+	window.removeEventListener('mouseup', stopDrag);
+});
+
 </script>
 
 <style scoped>

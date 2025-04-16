@@ -10,7 +10,7 @@
 </template>
 
 <script setup lang="ts">
-import { ButtonFace } from '@/model/ButtonFace';
+import { ButtonFace } from '../../model/ButtonFace';
 
 const props = defineProps<{
 	face: ButtonFace
