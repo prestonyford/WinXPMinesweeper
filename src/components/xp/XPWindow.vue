@@ -7,24 +7,31 @@
 			<div class="text-white pointer-events-none select-none">{{ title }}</div>
 		</div>
 		<div class="content" :style="windowStyle">
+			<MenuBar v-if="showMenuBar" :menuBarOptions="menuBarOptions" />
 			<slot></slot>
 		</div>
 	</div>
 </template>
 
 <script setup lang="ts">
+import type MenuBarOption from '@/model/MenuBarOption';
 import { computed, nextTick, onBeforeUnmount, onMounted, ref } from 'vue';
+import MenuBar from './MenuBar.vue';
 
 
 const props = withDefaults(
 	defineProps<{
 		title: string,
 		startingContentWidth?: string,
-		startingContentHeight?: string
+		startingContentHeight?: string,
+		showMenuBar?: boolean,
+		menuBarOptions?: MenuBarOption[]
 	}>(),
 	{
 		startingContentWidth: 'auto',
-		startingContentHeight: 'auto'
+		startingContentHeight: 'auto',
+		showMenuBar: false,
+		menuBarOptions: () => []
 	}
 );
 
@@ -78,10 +85,16 @@ function center() {
 	const windowHeight = windowElement.value.offsetHeight;
 
 	const newX = (viewportWidth - windowWidth) / 2;
-	const newY = (viewportHeight - windowHeight) / 2;
+	let newY = (viewportHeight - windowHeight) / 2;
+
+	newY *= .8; // Slightly higher than center cause it looks better
 
 	windowElement.value.style.left = `${newX}px`;
 	windowElement.value.style.top = `${newY}px`;
+}
+
+function menuOptionClick(option: MenuBarOption) {
+
 }
 
 onMounted(() => {

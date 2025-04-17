@@ -17,6 +17,6 @@ export default defineComponent({
 
 <style scoped>
 .xp {
-	background-image: url("../assets/xp.png");
+	background-image: url("/src/assets/xp.png");
 }
 </style>

@@ -6,7 +6,7 @@
 				:allowClicks="allowClicks"
 				@click="onClick(row, col)"
 				@contextmenu.prevent="onRclick(row, col)"
-				@mousedown="event => emit('tileMouseDown', event)"
+				@mousedown="event => emit('tileMouseDown', event, props.board[row][col])"
 				@mouseup="emit('tileMouseUp')"
 				@mouseleave="emit('tileMouseUp')"
 			/>
@@ -27,7 +27,7 @@ const props = defineProps<{
 const emit = defineEmits<{
 	selectTile: [row: number, col: number]
 	markTile: [row: number, col: number]
-	tileMouseDown: [event: MouseEvent]
+	tileMouseDown: [event: MouseEvent, tile: Tile]
 	tileMouseUp: []
 }>();
 

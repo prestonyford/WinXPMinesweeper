@@ -26,7 +26,7 @@ export default class MinesweeperGame {
 	}
 
 	public static DebugGame(onGameLose: () => void = () => {}, onGameWin: () => void = () => {}): MinesweeperGame {
-		return new MinesweeperGame(3, 3, 3, onGameLose, onGameWin);
+		return new MinesweeperGame(20, 20, 1, onGameLose, onGameWin);
 	}
 
 	public static BeginnerGame(onGameLose: () => void = () => {}, onGameWin: () => void = () => {}): MinesweeperGame {
@@ -38,7 +38,7 @@ export default class MinesweeperGame {
 	}
 	
 	public static HardGame(onGameLose: () => void = () => {}, onGameWin: () => void = () => {}): MinesweeperGame {
-		return new MinesweeperGame(20, 20, 72, onGameLose, onGameWin);
+		return new MinesweeperGame(20, 20, 80, onGameLose, onGameWin);
 	}
 
 	public static ExtremeGame(onGameLose: () => void = () => {}, onGameWin: () => void = () => {}): MinesweeperGame {
@@ -154,8 +154,18 @@ export default class MinesweeperGame {
 				if (bombs === 0) {
 					stack.push(...this.getNeighbors(r, c));
 				}
-				this.board[r][c] = { type: TileType.NUMBER, value: bombs };
-				++this.numOpenTiles;
+				if (
+					this.board[r][c].type === TileType.UNOPENED
+					|| (this.board[r][c].type === TileType.FLAGGED && !this.bombLocations.has(`${r},${c}`))
+				) {
+					this.board[r][c] = { type: TileType.NUMBER, value: bombs };
+					++this.numOpenTiles;
+
+					if (this.flagLocations.has(`${r},${c}`)){
+						this.flagLocations.delete(`${r},${c}`);
+						--this.numFlags;
+					}
+				}
 			}
 		}
 	}

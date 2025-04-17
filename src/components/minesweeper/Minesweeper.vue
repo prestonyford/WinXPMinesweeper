@@ -1,5 +1,5 @@
 <template>
-	<div class="h-full flex flex-col">
+	<div class="h-full flex flex-col select-none">
 		<div class="frame">
 			<div class="bg-[#C0C0C0] h-full flex flex-col p-[6px] gap-[6px]">
 				<div class="upper-frame h-[46px] flex justify-between items-center p-[4px]">
@@ -28,7 +28,7 @@ import NumberDisplay from './NumberDisplay.vue';
 import GameBoard from './GameBoard.vue';
 import MinesweeperButton from './MinesweeperButton.vue';
 import MinesweeperGame from '../../model/MinesweeperGame';
-import { TileType } from '../../model/TileType';
+import { TileType, type Tile } from '../../model/TileType';
 import { ButtonFace } from '../../model/ButtonFace';
 
 const time = ref(0);
@@ -56,9 +56,13 @@ function markTile(row: number, col: number) {
 	}
 }
 
-function tileMouseDown(event: MouseEvent) {
+function tileMouseDown(event: MouseEvent, tile: Tile) {
 	// Left click
-	if (event.button === 0 && currentButtonFace.value === ButtonFace.SMILE) {
+	if (
+		event.button === 0
+		&& currentButtonFace.value === ButtonFace.SMILE
+		&& tile.type === TileType.UNOPENED
+	) {
 		currentButtonFace.value = ButtonFace.SURPRISE;
 	}
 }
@@ -73,7 +77,7 @@ function reset() {
 	stopTimer();
 	gameInProgress.value = true;
 	currentButtonFace.value = ButtonFace.SMILE;
-	gameState.game = MinesweeperGame.IntermediateGame(onGameLost, onGameWon);
+	gameState.game = MinesweeperGame.DebugGame(onGameLost, onGameWon);
 	startTimer();
 }
 
