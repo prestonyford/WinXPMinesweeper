@@ -4,6 +4,7 @@
 			class="option px-[6px] h-full flex items-center"
 			:class="{'selected': option.name === openDropdown?.name}"
 			@click.stop="event => menuOptionClick(event, option)"
+			@mouseenter="event => menuOptionHover(event, option)"
 		>
 			{{ option.name }}
 		</div>
@@ -35,9 +36,16 @@ let openDropdown = ref<null | MenuBarOption>(null);
 const menuDropdown = ref<null | HTMLElement>(null);
 const dropdownPosition = ref({ top: '0px', left: '0px' });
 
-async function menuOptionClick(event: MouseEvent, option: MenuBarOption) {
+async function menuOptionClick(event: MouseEvent, option: MenuBarOption, ignoreSameDropdown = false) {
 	const el = event.target as HTMLElement | null;
 	if (!el) return;
+
+	if (!ignoreSameDropdown) {
+		if (openDropdown.value?.name === option.name) {
+			openDropdown.value = null;
+			return;
+		}
+	}
 
 	openDropdown.value = option;
 	await nextTick();
@@ -46,6 +54,12 @@ async function menuOptionClick(event: MouseEvent, option: MenuBarOption) {
 	
 	dropdownPosition.value.top = `${el.offsetHeight}px`;
 	dropdownPosition.value.left = `${el.offsetLeft}px`;
+}
+
+function menuOptionHover(event: MouseEvent, option: MenuBarOption) {
+	if (menuDropdown.value) {
+		menuOptionClick(event, option, true);
+	}
 }
 
 function onClickAway(event: MouseEvent) {
