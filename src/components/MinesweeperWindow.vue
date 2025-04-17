@@ -1,5 +1,5 @@
 <template>
-	<XPWindow title="Minesweeper" showMenuBar :menuBarOptions="menuBarOptions">
+	<XPWindow title="Minesweeper" showMenuBar :menuBarOptions="menuBarOptions" @optionSelected="onOptionSelect">
 		<template #icon>
 			<img src="../assets/Minesweeper.png"/>
 		</template>
@@ -24,10 +24,16 @@ const menuBarOptions: MenuBarOptions[] = [
 		]
 	},
 	{
-		name: "Help"
+		name: "Help",
+		options: [
+			"TODO"
+		]
 	}
-]
+];
 
+function onOptionSelect(option: string) {
+	console.log(option);
+}
 
 
 </script>

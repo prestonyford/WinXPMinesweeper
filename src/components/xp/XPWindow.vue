@@ -7,7 +7,7 @@
 			<div class="text-white pointer-events-none select-none">{{ title }}</div>
 		</div>
 		<div class="content" :style="windowStyle">
-			<MenuBar v-if="showMenuBar" :menuBarOptions="menuBarOptions" />
+			<MenuBar v-if="showMenuBar" :menuBarOptions="menuBarOptions" @optionSelected="onOptionSelect"/>
 			<slot></slot>
 		</div>
 	</div>
@@ -34,6 +34,10 @@ const props = withDefaults(
 		menuBarOptions: () => []
 	}
 );
+
+const emit = defineEmits<{
+	optionSelected: [option: string]
+}>();
 
 const isDragging = ref(false);
 const offsetX = ref(0);
@@ -93,8 +97,8 @@ function center() {
 	windowElement.value.style.top = `${newY}px`;
 }
 
-function menuOptionClick(option: MenuBarOption) {
-
+function onOptionSelect(option: string) {
+	emit("optionSelected", option);
 }
 
 onMounted(() => {
