@@ -77,7 +77,7 @@ function reset() {
 	stopTimer();
 	gameInProgress.value = true;
 	currentButtonFace.value = ButtonFace.SMILE;
-	gameState.game = MinesweeperGame.DebugGame(onGameLost, onGameWon);
+	gameState.game = MinesweeperGame.HardGame(onGameLost, onGameWon);
 	startTimer();
 }
 
