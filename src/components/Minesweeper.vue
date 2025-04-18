@@ -149,21 +149,24 @@ function stopTimer() {
 function onOptionSelect(option: string) {
 	switch (option) {
 		case gameOptions.NEW:
+			reset();
 			break
 		case gameOptions.BEGINNER:
 			gameMaker = () => MinesweeperGame.BeginnerGame(onGameLost, onGameWon);
+			reset();
 			break;
 		case gameOptions.INTERMEDIATE:
 			gameMaker = () => MinesweeperGame.IntermediateGame(onGameLost, onGameWon);
+			reset();
 			break;
 		case gameOptions.EXPERT:
 			gameMaker = () => MinesweeperGame.HardGame(onGameLost, onGameWon);
+			reset();
 			break;
 		case gameOptions.CUSTOM:
 			showCustomFieldPopup.value = true;
 			break;
 	}
-	reset();
 }
 
 function createCustomField(height: number, width: number, mines: number) {
