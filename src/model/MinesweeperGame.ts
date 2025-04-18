@@ -203,4 +203,7 @@ export default class MinesweeperGame {
 	public getNumFlags(): number {
 		return this.numFlags;
 	}
+	public getNumOpenTiles(): number {
+		return this.numOpenTiles;
+	}
 }

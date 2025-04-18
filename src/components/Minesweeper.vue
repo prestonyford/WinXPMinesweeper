@@ -81,6 +81,9 @@ const menuBarOptions: MenuBarOptions[] = [
 // Methods
 function selectTile(row: number, col: number) {
 	if (gameInProgress.value) {
+		if (gameState.game.getNumOpenTiles() === 0) {
+			startTimer();
+		}
 		gameState.game.chooseTile(row, col);
 	}
 }
@@ -117,7 +120,7 @@ function reset() {
 	gameInProgress.value = true;
 	currentButtonFace.value = ButtonFace.SMILE;
 	gameState.game = gameMaker()
-	startTimer();
+	time.value = 0;
 }
 
 function onGameLost() {
