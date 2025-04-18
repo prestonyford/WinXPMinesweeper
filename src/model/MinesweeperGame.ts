@@ -34,11 +34,11 @@ export default class MinesweeperGame {
 	}
 
 	public static IntermediateGame(onGameLose: () => void = () => {}, onGameWin: () => void = () => {}): MinesweeperGame {
-		return new MinesweeperGame(9, 18, 20, onGameLose, onGameWin);
+		return new MinesweeperGame(16, 16, 40, onGameLose, onGameWin);
 	}
 	
 	public static HardGame(onGameLose: () => void = () => {}, onGameWin: () => void = () => {}): MinesweeperGame {
-		return new MinesweeperGame(20, 20, 80, onGameLose, onGameWin);
+		return new MinesweeperGame(16, 30, 99, onGameLose, onGameWin);
 	}
 
 	public static ExtremeGame(onGameLose: () => void = () => {}, onGameWin: () => void = () => {}): MinesweeperGame {

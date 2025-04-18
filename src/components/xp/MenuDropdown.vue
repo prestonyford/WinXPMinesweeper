@@ -1,5 +1,5 @@
 <template>
-	<div class="dropdown absolute flex flex-col py-[2px]">
+	<div class="dropdown z-10 absolute flex flex-col py-[2px]">
 		<div v-for="option in options" class="px-[6px] py-[2px]" @click="onOptionSelect(option)">
 			{{ option }}
 		</div>

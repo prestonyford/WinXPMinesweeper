@@ -1,5 +1,5 @@
 <template>
-	<div class="menubar bg-[#ECE9D8] h-[22px] flex select-none text-[13px] pl-[4px] relative">
+	<div class="menubar bg-[#ECE9D8] h-[22px] flex select-none text-[13px] relative">
 		<div v-for="option in props.menuBarOptions"
 			class="option px-[6px] h-full flex items-center"
 			:class="{'selected': option.name === openDropdown?.name}"

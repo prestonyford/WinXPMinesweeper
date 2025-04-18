@@ -17,10 +17,7 @@ import type { PropType } from 'vue'
 export default defineComponent({
 	props: {
 		number: {
-			required: true,
-			validator(value: number) {
-				return value <= 999;
-			},
+			required: true
 		}
 	},
 	computed: {
@@ -39,8 +36,8 @@ export default defineComponent({
 	border-left: 1px #808080 solid;
 	border-right: 1px white solid;
 	border-bottom: 1px white solid;
-	width: 59px;
-	height: 36px;
+	/* width: 59px; */
+	/* height: 42px; */
 	padding: 1px;
 	gap: 2px;
 }

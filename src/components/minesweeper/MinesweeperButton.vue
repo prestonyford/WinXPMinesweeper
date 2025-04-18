@@ -1,10 +1,10 @@
 <template>
 	<div class="button">
-		<button class="h-[28px] w-[28px] flex items-center justify-center">
-			<img v-if="props.face === ButtonFace.SURPRISE" src="../../assets/Surprise.png">
-			<img v-else-if="props.face === ButtonFace.DEAD" src="../../assets/Dead.png">
-			<img v-else-if="props.face === ButtonFace.COOL" src="../../assets/Cool.png">
-			<img v-else src="../../assets/Smile.png">
+		<button class="p-[2px] flex items-center justify-center">
+			<img width="17px" height="17px" v-if="props.face === ButtonFace.SURPRISE" src="../../assets/Surprise.png">
+			<img width="17px" height="17px" v-else-if="props.face === ButtonFace.DEAD" src="../../assets/Dead.png">
+			<img width="17px" height="17px" v-else-if="props.face === ButtonFace.COOL" src="../../assets/Cool.png">
+			<img width="17px" height="17px" v-else src="../../assets/Smile.png">
 		</button>
 	</div>
 </template>
