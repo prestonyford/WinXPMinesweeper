@@ -42,8 +42,13 @@ function sanitizeInput(event: Event, field: 'height' | 'width' | 'mines') {
 	} else if (field === 'width') {
 		width.value = value ? Math.max(parseInt(value, 10), 1) : 1;
 	} else if (field === 'mines') {
-		const maxMines = height.value * width.value - 1;
-		mines.value = value ? Math.min(parseInt(value, 10), maxMines) : maxMines;
+		if (value) {
+			const maxMines = height.value * width.value - 1;
+			let newVal = parseInt(value, 10);
+			newVal = Math.min(newVal, maxMines);
+			newVal = Math.max(newVal, 1);
+			mines.value = newVal
+		}
 	}
 	
 	input.value = value;
