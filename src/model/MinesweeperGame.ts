@@ -123,10 +123,10 @@ export default class MinesweeperGame {
 	}
 
 	public chooseTile(row: number, col: number) {
-		if (this.bombLocations.has(`${row},${col}`)) {
-			this.loseGame(row, col);
+		if (this.board[row][col].type === TileType.FLAGGED) {
 			return;
-		} else if (this.board[row][col].type === TileType.FLAGGED) {
+		} else if (this.bombLocations.has(`${row},${col}`)) {
+			this.loseGame(row, col);
 			return;
 		}
 		const numNeighborBombs = this.countNeighborBombs(row, col);

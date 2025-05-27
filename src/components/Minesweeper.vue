@@ -136,10 +136,12 @@ function onGameWon() {
 }
 
 function startTimer() {
-	time.value = 0;
-	interval.value = window.setInterval(() => {
-		time.value++;
-	}, 1000);
+	if (interval.value === null) {
+		time.value = 0;
+		interval.value = window.setInterval(() => {
+			time.value++;
+		}, 1000);
+	}
 }
 
 function stopTimer() {
