@@ -1,5 +1,5 @@
 # Minesweeper
-Mimics the look and gameplay of Windows XP Minesweeper in the browser, for your enjoyment.
+Minesweeper in the style of Windows XP. Made with Vue 3, Tailwind CSS, and Typescript.
 
 ![preview](Screenshot.png)
 
